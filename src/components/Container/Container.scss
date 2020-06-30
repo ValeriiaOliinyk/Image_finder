@@ -1,10 +1,8 @@
 @import '../../styles/shared.scss';
 
-.App {
+.Container {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 16px;
   padding-bottom: 24px;
 }
-
-// Можно создать компонент и задать ему эти стили

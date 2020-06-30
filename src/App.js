@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import Container from './components/Container';
 import Seacrchbar from './components/Searchbar';
 import ImageGallery from './components/ImageGallery';
+import Button from './components/Button';
+import MainLoader from './components/MainLoader';
+import Loader from 'react-loader-spinner';
+import Modal from './components/Modal';
 import picturesApi from './services/pictures-api';
-import './App.scss';
 
 class App extends Component {
   state = {
@@ -11,6 +15,8 @@ class App extends Component {
     searchQuery: '',
     isLoading: false,
     error: null,
+    largeImgUrl: '',
+    alternative: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -28,8 +34,16 @@ class App extends Component {
     });
   };
 
+  scrollDocument = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
   fetchPictures = () => {
     const { currentPage, searchQuery } = this.state;
+
     const options = {
       currentPage,
       searchQuery,
@@ -44,28 +58,55 @@ class App extends Component {
           pictures: [...prevState.pictures, ...hits],
           currentPage: prevState.currentPage + 1,
         }));
+        this.scrollDocument();
       })
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
+  openModal = e => {
+    const { alt } = e.currentTarget;
+    this.setState({
+      largeImgUrl: e.currentTarget.dataset.source,
+      alternative: alt,
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      largeImgUrl: '',
+      alternative: '',
+    });
+  };
+
   render() {
-    const { pictures, isLoading, error } = this.state;
+    const { pictures, isLoading, largeImgUrl, error, alternative } = this.state;
     const shouldRenderLoadMoreBtn = pictures.length > 0 && !isLoading;
     return (
-      <>
-        {error && <div>Something went wrong please try again</div>}
+      <Container>
         <Seacrchbar onSubmit={this.formSubmit} />
-
-        <ImageGallery images={pictures} />
-
-        {isLoading && <h1>Loading...</h1>}
-        {shouldRenderLoadMoreBtn && (
-          <button type="button" onClick={this.fetchPictures}>
-            Load more
-          </button>
+        {largeImgUrl && (
+          <Modal
+            largeImgUrl={largeImgUrl}
+            alternative={alternative}
+            onClose={this.closeModal}
+          />
         )}
-      </>
+        <ImageGallery images={pictures} onClick={this.openModal} />
+        {error && <div>Something went wrong please try again</div>}
+        {isLoading && (
+          <MainLoader>
+            <Loader
+              type="Circles"
+              color="#00BFFF"
+              height={80}
+              width={80}
+              timeout={3000}
+            />
+          </MainLoader>
+        )}
+        {shouldRenderLoadMoreBtn && <Button onClick={this.fetchPictures} />}
+      </Container>
     );
   }
 }

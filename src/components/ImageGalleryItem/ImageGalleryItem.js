@@ -1,9 +1,15 @@
 import React from 'react';
 import './ImageGalleryItem.scss';
 
-const ImageGalleryItem = ({ webformatURL, tags }) => {
+const ImageGalleryItem = ({ webformatURL, tags, largeImageURL, onClick }) => {
   return (
-    <img src={webformatURL} alt={tags} className="ImageGalleryItem-image" />
+    <img
+      src={webformatURL}
+      alt={tags}
+      data-source={largeImageURL}
+      className="ImageGalleryItem-image"
+      onClick={onClick}
+    />
   );
 };
 
