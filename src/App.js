@@ -6,6 +6,7 @@ import Button from './components/Button';
 import MainLoader from './components/MainLoader';
 import Loader from 'react-loader-spinner';
 import Modal from './components/Modal';
+import Error from './components/Error';
 import picturesApi from './services/pictures-api';
 
 class App extends Component {
@@ -43,7 +44,6 @@ class App extends Component {
 
   fetchPictures = () => {
     const { currentPage, searchQuery } = this.state;
-
     const options = {
       currentPage,
       searchQuery,
@@ -93,7 +93,7 @@ class App extends Component {
           />
         )}
         <ImageGallery images={pictures} onClick={this.openModal} />
-        {error && <div>Something went wrong please try again</div>}
+        {error && <Error text={error} />}
         {isLoading && (
           <MainLoader>
             <Loader

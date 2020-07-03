@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Searchbar.scss';
 
 class Seacrchbar extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   state = {
     inputValue: '',
   };
@@ -31,13 +36,10 @@ class Seacrchbar extends Component {
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Search</span>
           </button>
-
           <input
             className="SearchForm-input"
             type="text"
             value={inputValue}
-            // autocomplete="off"
-            // autofocus
             onChange={this.handelInputChange}
             placeholder="Search images and photos"
           />

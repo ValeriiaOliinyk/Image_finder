@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Button.scss';
 
 const Button = ({ onClick }) => (
@@ -6,5 +7,9 @@ const Button = ({ onClick }) => (
     Load more
   </button>
 );
+
+Button.protoTypes = {
+  onclick: PropTypes.func.isRequired,
+};
 
 export default Button;
